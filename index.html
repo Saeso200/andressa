@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Player de Vídeo Personalizado</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #fff;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+        }
+        video {
+            width: 100%;
+            max-width: 800px;
+            height: auto;
+        }
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 800px;
+            margin-top: 10px;
+        }
+        button, input[type="range"] {
+            background: #333;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+        }
+        input[type="range"] {
+            width: 100%;
+            margin: 0 10px;
+        }
+    </style>
+</head>
+<body>
+    <video id="video" src="assets/andressa_no_banho.mp4"></video>
+    <div class="controls">
+        <button id="playPause">Play</button>
+        <button id="rewind"><< 10s</button>
+        <input type="range" id="progress" min="0" max="100" value="0">
+        <button id="forward">10s >></button>
+        <button id="fullscreen">Tela Cheia</button>
+    </div>
+    <script>
+        const video = document.getElementById('video');
+        const playPause = document.getElementById('playPause');
+        const rewind = document.getElementById('rewind');
+        const forward = document.getElementById('forward');
+        const progress = document.getElementById('progress');
+        const fullscreen = document.getElementById('fullscreen');
+
+        video.controls = false;
+
+        playPause.addEventListener('click', () => {
+            if (video.paused) {
+                video.play();
+                playPause.textContent = 'Pause';
+            } else {
+                video.pause();
+                playPause.textContent = 'Play';
+            }
+        });
+
+        rewind.addEventListener('click', () => {
+            video.currentTime -= 10;
+        });
+
+        forward.addEventListener('click', () => {
+            video.currentTime += 10;
+        });
+
+        video.addEventListener('timeupdate', () => {
+            progress.value = (video.currentTime / video.duration) * 100;
+        });
+
+        progress.addEventListener('input', () => {
+            video.currentTime = (progress.value / 100) * video.duration;
+        });
+
+        fullscreen.addEventListener('click', () => {
+            if (video.requestFullscreen) {
+                video.requestFullscreen();
+            } else if (video.mozRequestFullScreen) {
+                video.mozRequestFullScreen();
+            } else if (video.webkitRequestFullscreen) {
+                video.webkitRequestFullscreen();
+            } else if (video.msRequestFullscreen) {
+                video.msRequestFullscreen();
+            }
+        });
+    </script>
+</body>
+</html>
